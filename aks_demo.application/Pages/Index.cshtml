@@ -1,0 +1,17 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    Here are your app settings. If you see "Nothing to share", double check your SecretProviderClass, AzurePodIdentity, AzurePodBinding or Deployment configurations
+    
+    <ul>
+    @foreach (var setting in Model.appSettings)
+    {
+        <li>@setting.Key: @setting.Value</li>
+    }
+    </ul>
+</div>
