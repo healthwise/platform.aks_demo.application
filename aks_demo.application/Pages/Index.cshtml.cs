@@ -15,20 +15,27 @@ namespace aks_demo.application.Pages
         private readonly ILogger<IndexModel> _logger;
         private readonly IConfiguration _configuration;
         public Dictionary<string, string> appSettings { get; set; }
-
+        public Dictionary<string, string> nestedSettings { get; set; }
+        public Dictionary<string, string> rootSettings { get; set; }
         public IndexModel(ILogger<IndexModel> logger, IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
             appSettings = new Dictionary<string, string>();
+            rootSettings = new Dictionary<string, string>();
+            nestedSettings = new Dictionary<string, string>();
         }
 
         public void OnGet()
         {
-            var mySecrets = new MySecrets();
-            _configuration.GetSection("MySecrets").Bind(mySecrets);
-            appSettings.Add("My new secret", mySecrets.myNewSecret);
-            appSettings.Add("My other new secret", mySecrets.myOtherNewSecret);
+           
+            appSettings.Add("My non Key Vault based app setting", _configuration["myNonSecretAppSetting"]);
+
+            rootSettings.Add("My new secret", _configuration["myNewSecret"]);
+            rootSettings.Add("My other new secret", _configuration["myOtherNewSecret"]);
+
+            nestedSettings.Add("My nested new secret", _configuration["MySecrets:myNewSecret"]);
+            nestedSettings.Add("My nested other new secret", _configuration["MySecrets:myOtherNewSecret"]);
 
         }
     }

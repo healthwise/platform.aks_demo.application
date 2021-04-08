@@ -24,7 +24,15 @@ namespace aks_demo.application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
-            services.Configure<MySecrets>(Configuration.GetSection("MySecrets"));
+            // These are appsettings in a json block
+            //In our secrets definition we will follow the format of <node>__<secret>. For example,  MySecrets_myNewSecret resolves to 
+            //{
+            //  MySecrets: {
+            //    myNewSecret: "some value" 
+            // }
+            //}
+            services.Configure<MySecrets>(Configuration.GetSection(""));
+            services.Configure<NestedMySecrets>(Configuration.GetSection("MySecrets"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

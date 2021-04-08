@@ -11,4 +11,11 @@ namespace aks_demo.application
         public string myNewSecret { get; set; }
         public string myOtherNewSecret { get; set; }
     }
+
+
+    public class NestedMySecrets
+    {
+        public string myNewSecret { get; set; }
+        public string myOtherNewSecret { get; set; }
+    }
 }

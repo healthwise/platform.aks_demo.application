@@ -1,0 +1,112 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: primary
+  name: aks-demo-app
+  labels:
+    app: aks-demo-app   
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: aks-demo-app
+  template:
+    metadata:
+      labels:
+        app: aks-demo-app
+        aadpodidbinding: kv-secrets-demo    
+    spec:      
+      containers:
+        - name: aks-demo-app          
+          image: "hwwestacr.azurecr.io/aks_demo_app:latest"
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: appsettings
+            mountPath: "/mnt/appsettings"
+            readOnly: true    
+          env:
+          - name: myOtherNewSecret
+            valueFrom:
+              secretKeyRef:
+                name: appsettings
+                key: myOtherNewSecret
+          - name: myNewSecret
+            valueFrom:
+              secretKeyRef:
+                name: appsettings
+                key: myNewSecret
+          - name: MySecrets__myOtherNewSecret  #__ lets us create nested app settings in .net
+            valueFrom:
+              secretKeyRef:
+                name: appsettings
+                key: myNestedOtherNewSecret
+          - name: MySecrets__myNewSecret
+            valueFrom:
+              secretKeyRef:
+                name: appsettings
+                key: myNestedNewSecret
+          - name: myNonSecretAppSetting
+            value: "I'm not a secret, just a setting"
+      volumes:
+        - name: appsettings
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: kv-secrets-demo
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: aks-demo-app
+  namespace: primary
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: aks-demo-app
+
+---
+
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: aks-demo-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: aks-demo-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: AverageValue
+        averageValue: 500Mi
+  # Uncomment these lines if you create the custom packets_per_second metric and
+  # configure your app to export the metric.
+  # - type: Pods
+  #   pods:
+  #     metric:
+  #       name: packets_per_second
+  #     target:
+  #       type: AverageValue
+  #       averageValue: 100
