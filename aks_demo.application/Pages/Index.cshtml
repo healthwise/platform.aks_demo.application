@@ -1,0 +1,34 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    Here are your app settings. If you see "Nothing to share", double check your SecretProviderClass, AzurePodIdentity, AzurePodBinding or Deployment configurations
+
+</div>
+<div>
+    <h3>Non Key Vault Based Application Settings</h3>
+    <ul>
+        @foreach (var setting in Model.appSettings)
+        {
+            <li>@setting.Key: @setting.Value</li>
+        }
+    </ul>
+    <h3>Key Vault Based Application Settings</h3>
+    <ul>
+        @foreach (var setting in Model.rootSettings)
+        {
+            <li>@setting.Key: @setting.Value</li>
+        }
+    </ul>
+    <h3>Nested Key Vault Based Application Settings</h3>
+    <ul>
+        @foreach (var setting in Model.nestedSettings)
+        {
+            <li>@setting.Key: @setting.Value</li>
+        }
+    </ul>
+</div>
