@@ -4,7 +4,7 @@ metadata:
   namespace: primary
   name: aks-demo-app
   labels:
-    app: aks-demo-app   
+    app: aks-demo-app
 spec:
   replicas: 2
   strategy:
@@ -19,11 +19,18 @@ spec:
     metadata:
       labels:
         app: aks-demo-app
-        aadpodidbinding: kv-secrets-demo    
+        aadpodidbinding: aks-demo-app-kv    
     spec:      
       containers:
         - name: aks-demo-app          
-          image: "hwwestacr.azurecr.io/aks_demo_app:latest"
+          image: "hwdemohwacr.azurecr.io/aks_demo_app:v1"
+          resources:
+            limits:
+              cpu: 300m # How much CPU should we preallocate for each instance of this container, in millicpus
+              memory: 1024Mi # How much RAM should we preallocate for each instance of this container
+            requests:
+              cpu: 200m # How much CPU should we allow for requests before triggering a new container, in millicpus
+              memory: 256Mi # How much RAM should we allow for requests before triggering a new container, in millicpus
           ports:
           - containerPort: 80
           volumeMounts:
@@ -59,7 +66,7 @@ spec:
             driver: secrets-store.csi.k8s.io
             readOnly: true
             volumeAttributes:
-              secretProviderClass: kv-secrets-demo
+              secretProviderClass: aks-demo-app-kv
 
 ---
 

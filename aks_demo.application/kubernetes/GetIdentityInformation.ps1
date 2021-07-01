@@ -1,9 +1,9 @@
 ﻿
 # Collect principals and resource group for Managed Identity Role Assignments
 #!!!!!!!!!!!! Change these to your installations values!
-$subscription = "722daa54-db9c-4486-81e8-fe8e9c3a8773"
-$aksResourceGroup = "hwdemo-rg-westus-aks"
-$aksName = "hwdemo-aks-westus"
+$subscription = "6152dde1-b5ce-41f3-9a19-ff98dff9bb63"
+$aksResourceGroup = "hw-demo-rg-westus-aks"
+$aksName = "hw-demo-aks-westus"
 
 $aks = az aks show --resource-group $aksResourceGroup --name $aksName --subscription $subscription | ConvertFrom-Json
 $userAssignedIdentity = az resource list -g $aks.nodeResourceGroup --subscription $subscription --query "[?contains(type, 'Microsoft.ManagedIdentity/userAssignedIdentities')] | [?ends_with(name,'agentpool')]" | ConvertFrom-Json      

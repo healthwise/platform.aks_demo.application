@@ -1,18 +1,18 @@
 ﻿apiVersion: aadpodidentity.k8s.io/v1
 kind: AzureIdentity
 metadata:
-    name: hwdemo-aks-westus-agentpool
+    name: hw-demo-aks-westus-agentpool
 spec:
     type: 0
-    resourceID: /subscriptions/722daa54-db9c-4486-81e8-fe8e9c3a8773/resourcegroups/MC_hwdemo-rg-westus-aks_hwdemo-aks-westus_westus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hwdemo-aks-westus-agentpool
-    clientID: 3a0d44fe-8b51-45e2-935b-a1cb61820bee
+    resourceID: /subscriptions/6152dde1-b5ce-41f3-9a19-ff98dff9bb63/resourcegroups/MC_hw-demo-rg-westus-aks_hw-demo-aks-westus_westus/providers/Microsoft.ManagedIdentity/userAssignedIdentities/hw-demo-aks-westus-agentpool
+    clientID: 13fd88b1-c5fb-4cce-9432-a607f0743452
 
 ---
 
 apiVersion: aadpodidentity.k8s.io/v1
 kind: AzureIdentityBinding
 metadata:
-    name: hwdemo-aks-westus-agentpool-binding
+    name: hw-demo-aks-westus-agentpool-binding
 spec:
-    azureIdentity: hwdemo-aks-westus-agentpool
-    selector: kv-secrets-demo
+    azureIdentity: hw-demo-aks-westus-agentpool
+    selector: aks-demo-app-kv

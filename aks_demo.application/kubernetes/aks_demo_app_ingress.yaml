@@ -13,8 +13,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - platformsvc.dev.hwapps.net
-    - aks-ingress.dev.hwapps.net 
+    - demo.test.com
     secretName: ingress-tls-csi
   rules:
     - host: demo.test.com
