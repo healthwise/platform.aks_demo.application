@@ -36,6 +36,7 @@ spec:
     tls:
       mode: SIMPLE # enables HTTPS on this port
       credentialName: dev-ingress-cert
+      minProtocolVersion: TLSV1_2
     hosts:
     - devops.dev.hwapps.net
   - port:
@@ -57,6 +58,7 @@ spec:
     tls:
       mode: SIMPLE # enables HTTPS on this port
       credentialName: dev-ingress-cert
+      minProtocolVersion: TLSV1_2
     hosts:
     - aks-istio.dev.hwapps.net
 ---
